@@ -1,291 +1,356 @@
-# Experiment 2: DDL Commands
+# Experiment 3: DML Commands
 
 ## AIM
-To study and implement DDL commands and different types of constraints.
+To study and implement DML (Data Manipulation Language) commands.
 
 ## THEORY
 
-### 1. CREATE
-Used to create a new relation (table).
-
+### 1. INSERT INTO
+Used to add records into a relation.
+These are three type of INSERT INTO queries which are as
+A)Inserting a single record
+**Syntax (Single Row):**
+```sql
+INSERT INTO table_name (field_1, field_2, ...) VALUES (value_1, value_2, ...);
+```
+**Syntax (Multiple Rows):**
+```sql
+INSERT INTO table_name (field_1, field_2, ...) VALUES
+(value_1, value_2, ...),
+(value_3, value_4, ...);
+```
+**Syntax (Insert from another table):**
+```sql
+INSERT INTO table_name SELECT * FROM other_table WHERE condition;
+```
+### 2. UPDATE
+Used to modify records in a relation.
+Syntax:
+```sql
+UPDATE table_name SET column1 = value1, column2 = value2 WHERE condition;
+```
+### 3. DELETE
+Used to delete records from a relation.
+**Syntax (All rows):**
+```sql
+DELETE FROM table_name;
+```
+**Syntax (Specific condition):**
+```sql
+DELETE FROM table_name WHERE condition;
+```
+### 4. SELECT
+Used to retrieve records from a table.
 **Syntax:**
 ```sql
-CREATE TABLE (
-  field_1 data_type(size),
-  field_2 data_type(size),
-  ...
-);
+SELECT column1, column2 FROM table_name WHERE condition;
 ```
-### 2. ALTER
-Used to add, modify, drop, or rename fields in an existing relation.
-(a) ADD
-```sql
-ALTER TABLE std ADD (Address CHAR(10));
-```
-(b) MODIFY
-```sql
-ALTER TABLE relation_name MODIFY (field_1 new_data_type(size));
-```
-(c) DROP
-```sql
-ALTER TABLE relation_name DROP COLUMN field_name;
-```
-(d) RENAME
-```sql
-ALTER TABLE relation_name RENAME COLUMN old_field_name TO new_field_name;
-```
-### 3. DROP TABLE
-Used to permanently delete the structure and data of a table.
-```sql
-DROP TABLE relation_name;
-```
-### 4. RENAME
-Used to rename an existing database object.
-```sql
-RENAME TABLE old_relation_name TO new_relation_name;
-```
-### CONSTRAINTS
-Constraints are used to specify rules for the data in a table. If there is any violation between the constraint and the data action, the action is aborted by the constraint. It can be specified when the table is created (using CREATE TABLE) or after it is created (using ALTER TABLE).
-### 1. NOT NULL
-When a column is defined as NOT NULL, it becomes mandatory to enter a value in that column.
-Syntax:
-```sql
-CREATE TABLE Table_Name (
-  column_name data_type(size) NOT NULL
-);
-```
-### 2. UNIQUE
-Ensures that values in a column are unique.
-Syntax:
-```sql
-CREATE TABLE Table_Name (
-  column_name data_type(size) UNIQUE
-);
-```
-### 3. CHECK
-Specifies a condition that each row must satisfy.
-Syntax:
-```sql
-CREATE TABLE Table_Name (
-  column_name data_type(size) CHECK (logical_expression)
-);
-```
-### 4. PRIMARY KEY
-Used to uniquely identify each record in a table.
-Properties:
-Must contain unique values.
-Cannot be null.
-Should contain minimal fields.
-Syntax:
-```sql
-CREATE TABLE Table_Name (
-  column_name data_type(size) PRIMARY KEY
-);
-```
-### 5. FOREIGN KEY
-Used to reference the primary key of another table.
-Syntax:
-```sql
-CREATE TABLE Table_Name (
-  column_name data_type(size),
-  FOREIGN KEY (column_name) REFERENCES other_table(column)
-);
-```
-### 6. DEFAULT
-Used to insert a default value into a column if no value is specified.
-
-Syntax:
-```sql
-CREATE TABLE Table_Name (
-  col_name1 data_type,
-  col_name2 data_type,
-  col_name3 data_type DEFAULT 'default_value'
-);
-```
-
 **Question 1**
 --
-<img width="1193" height="354" alt="image" src="https://github.com/user-attachments/assets/8da958c2-a907-459c-b928-d41b7855b705" />
+-- Write a SQL statement to change the email column of employees table with 'Unavailable' for all employees in employees table.
 
+    Employees table
+    
+    ---------------
+    employee_id
+    
+    first_name
+    
+    last_name
+    
+    email
+    
+    phone_number
+    
+    hire_date
+    
+    job_id
+    
+    salary
+    
+    commission_pct
+    
+    manager_id
+    
+    department_id
 
 ```sql
-CREATE TABLE Employees(
-    EmployeeID Integer PRIMARY KEY,
-    FirstName TEXT NOT NULL,
-    LastName TEXT NOT NULL,
-    Email TEXT UNIQUE,
-    Salary REAL CHECK (Salary > 0),
-    DepartmentID INTEGER,
-    FOREIGN KEY (DepartmentID) REFERENCES Departments(DepartmentID)
-);
+--
+ UPDATE employees
+ SET email = 'Unavailable';
 ```
 
 **Output:**
 
-<img width="1603" height="396" alt="image" src="https://github.com/user-attachments/assets/4d97faa9-0c57-4f6a-ad2b-229c524fa3b1" />
+![image](https://github.com/user-attachments/assets/4229fa68-a775-49dc-aa6c-61cbbb7520a3)
 
 
 **Question 2**
 ---
-<img width="1048" height="438" alt="image" src="https://github.com/user-attachments/assets/969d9392-fbf2-4a7f-af3c-4c2369c11d55" />
-
+-- Write a SQL statement to Increase the selling price by 15% in the products table where quantity in stock is less than 50 and supplier ID is 10.
+    
+    Products Table 
+    
+    name          type       
+    ----------    ---------- 
+    
+    product_id     INT PRIMARY KEY        
+    
+    product_name   VARCHAR(10) 
+    
+    category       VARCHAR(50) 
+    
+    cost_price     DECIMAL(10) 
+    
+    sell_price     DECIMAL(10) 
+    
+    reorder_lv     INT        
+    
+    quantity       INT        
+    
+    supplier_id    INT       
 
 ```sql
-CREATE TABLE Events(
-EventID INTEGER,
-EventName TEXT,
-EventDate DATE
-);
+--
+UPDATE products
+SET sell_price = sell_price * 1.15
+WHERE quantity < 50 AND supplier_id = 10;
 ```
 
 **Output:**
 
-<img width="1612" height="366" alt="image" src="https://github.com/user-attachments/assets/cf6d99f3-5f29-47e9-b410-7de0ac6d0501" />
+![image](https://github.com/user-attachments/assets/ddd26284-60b8-47df-98d9-5ad5ffe3af1d)
 
 
 **Question 3**
 ---
-<img width="797" height="352" alt="image" src="https://github.com/user-attachments/assets/064490b4-417b-4508-95fe-ea103e1dc7ca" />
+-- Change the supplier name to upper case where contact person contains ' Singh' in suppliers table.
 
+    name               type
+    -----------------  ---------------
+    
+    supplier_id        INT
+    
+    supplier_name      VARCHAR(100)
+    
+    contact_person     VARCHAR(100)
+    
+    phone_number       VARCHAR(20)
+    
+    email              VARCHAR(100)
+    
+    address            VARCHAR(250)
 
 ```sql
-INSERT INTO Customers (CustomerID, Name, Address)
-VALUES (304,'Peter Parker', 'Spider St');
+--
+ UPDATE suppliers
+SET supplier_name = UPPER(supplier_name)
+WHERE contact_person LIKE '% Singh';
+
 ```
 
 **Output:**
 
-<img width="1386" height="425" alt="image" src="https://github.com/user-attachments/assets/1e6c4a10-0338-4e6f-98bc-b9ab76d60286" />
+![image](https://github.com/user-attachments/assets/cc0d6991-114d-4fc4-8768-ab940ed47ca9)
 
 
 **Question 4**
 ---
-<img width="1008" height="345" alt="image" src="https://github.com/user-attachments/assets/33528e68-35db-4949-84f9-f17c1729db08" />
+-- Write a SQL statement to Change the category to 'Household' where product name contains 'Detergent' in the products table.
 
+Products Table 
+
+name          type       
+----------    ---------- 
+
+    product_id     INT PRIMARY KEY      
+    
+    product_name   VARCHAR(10) 
+    
+    category       VARCHAR(50) 
+    
+    cost_price     DECIMAL(10) 
+    
+    sell_price     DECIMAL(10) 
+    
+    reorder_lvl    INT        
+    
+    quantity       INT        
+    
+    supplier_id    INT           
 
 ```sql
-CREATE TABLE Invoices(
-InvoiceID INTEGER PRIMARY KEY,
-InvoiceDate DATE,
-DueDate DATE,
-Amount REAL CHECK (Amount > 0),
-CHECK (DueDate > InvoiceDate)
-);
+--
+UPDATE products
+SET category = 'Household'
+WHERE product_name LIKE '%Detergent%';
 ```
 
 **Output:**
 
-<img width="1600" height="351" alt="image" src="https://github.com/user-attachments/assets/03871872-aa8b-49b3-a21d-53d707ae35c9" />
+![image](https://github.com/user-attachments/assets/42bfcc8e-f75c-48f3-88e1-245bdb8b35c9)
 
 
 **Question 5**
 ---
-<img width="1066" height="612" alt="image" src="https://github.com/user-attachments/assets/697b6d8a-df17-461a-b505-bc64e4a7c6c1" />
+-- Write a SQL query to Delete customers from 'customer' table where 'CUST_CITY' is not 'New York' and 'OUTSTANDING_AMT' is greater than 5000.
 
+Sample table: Customer
 
+    +-----------+-------------+-------------+--------------+--------------+-------+-------------+-------------+-------------+---------------+--------------+------------+  
+    |CUST_CODE  | CUST_NAME   | CUST_CITY   | WORKING_AREA | CUST_COUNTRY | GRADE | OPENING_AMT | RECEIVE_AMT | PAYMENT_AMT |OUTSTANDING_AMT| PHONE_NO     | AGENT_CODE |
+    +-----------+-------------+-------------+--------------+--------------+-------+-------------+-------------+-------------+---------------+--------------+------------+
+    | C00013    | Holmes      | London      | London       | UK           |     2 |     6000.00 |     5000.00 |     7000.00 |       4000.00 | BBBBBBB      | A003       |
+    | C00001    | Micheal     | New York    | New York     | USA          |     2 |     3000.00 |     5000.00 |     2000.00 |       6000.00 | CCCCCCC      | A008       |
+    | C00020    | Albert      | New York    | New York     | USA          |     3 |     5000.00 |     7000.00 |     6000.00 |       6000.00 | BBBBSBB      | A008       |
 ```sql
-ALTER TABLE Companies ADD COLUMN designation varchar(50);
-ALTER TABLE Companies ADD COLUMN net_salary number;
-ALTER TABLE Companies ADD COLUMN dob date;
+-- 
+DELETE FROM customer
+WHERE cust_city != 'New York'
+  AND outstanding_amt > 5000;
 ```
 
 **Output:**
 
-<img width="1848" height="472" alt="image" src="https://github.com/user-attachments/assets/35d9af50-892d-4ad4-ae74-3818de17067c" />
+![image](https://github.com/user-attachments/assets/528c7fc3-80b3-4bec-a8fd-9f28fa1a3e63)
 
 
 **Question 6**
 ---
-<img width="908" height="359" alt="image" src="https://github.com/user-attachments/assets/996d0d91-0cd8-42f2-8ec4-6a680081f70b" />
+-- 
+Write a SQL query to Delete customers from 'customer' table where 'CUST_NAME' has exactly 6 characters.
 
+Sample table: Customer
+    
+    +-----------+-------------+-------------+--------------+--------------+-------+-------------+-------------+-------------+---------------+--------------+------------+  
+    |CUST_CODE  | CUST_NAME   | CUST_CITY   | WORKING_AREA | CUST_COUNTRY | GRADE | OPENING_AMT | RECEIVE_AMT | PAYMENT_AMT |OUTSTANDING_AMT| PHONE_NO     | AGENT_CODE |
+    +-----------+-------------+-------------+--------------+--------------+-------+-------------+-------------+-------------+---------------+--------------+------------+
+    | C00013    | Holmes      | London      | London       | UK           |     2 |     6000.00 |     5000.00 |     7000.00 |       4000.00 | BBBBBBB      | A003       |
+    | C00001    | Micheal     | New York    | New York     | USA          |     2 |     3000.00 |     5000.00 |     2000.00 |       6000.00 | CCCCCCC      | A008       |
+    | C00020    | Albert      | New York    | New York     | USA          |     3 |     5000.00 |     7000.00 |     6000.00 |       6000.00 | BBBBSBB      | A008       |
 
 ```sql
-INSERT INTO Customers (CustomerID, Name, Address, Email)
-SELECT CustomerID, Name, Address, Email
-FROM Old_customers;
+-- 
+DELETE FROM customer
+WHERE LENGTH(cust_name) = 6;
 ```
 
 **Output:**
 
-<img width="1689" height="368" alt="image" src="https://github.com/user-attachments/assets/0ae8f4fd-9804-4c3a-940b-856edb1136a4" />
+![image](https://github.com/user-attachments/assets/46efbb4d-b863-48b9-9ef8-fb3020a8caaa)
 
 
 **Question 7**
 ---
-<img width="1513" height="390" alt="image" src="https://github.com/user-attachments/assets/b79686f2-4799-4fe4-b145-f31da66ca347" />
+-- 
+Write a SQL query to Delete All Doctors with a NULL Last Name
+
+Sample table: Doctors
+    
+    attributes : doctor_id, first_name, last_name, specialization
+    For example:
+    
+    Test	Result
+    SELECT * FROM doctors;
+    doctor_id   first_name  last_name   specialization
+    ----------  ----------  ----------  --------------
+    1           John        Smith       Cardiology
+    2           Emily       Johnson     Orthopedics
+    3           Michael     Brown       Pediatrics
+    4           Febin                   Cardiology
+    doctor_id   first_name  last_name   specialization
+    ----------  ----------  ----------  --------------
+    1           John        Smith       Cardiology
+    2           Emily       Johnson     Orthopedics
+    3           Michael     Brown       Pediatrics
 
 
 ```sql
-CREATE TABLE Products(
-ProductID INTEGER PRIMARY KEY,
-ProductName TEXT UNIQUE NOT NULL,
-Price REAL CHECK (Price > 0),
-StockQuantity INTEGER CHECK (StockQuantity >= 0)
-);
+--
+DELETE FROM doctors
+WHERE last_name IS NULL OR last_name = '';
 ```
 
 **Output:**
 
-<img width="1824" height="271" alt="image" src="https://github.com/user-attachments/assets/228e2470-f1d9-40ab-a26f-7aa052af6d86" />
+![image](https://github.com/user-attachments/assets/39e97d63-9ee9-47bb-9b19-42eb59bd6187)
 
 
 **Question 8**
 ---
-<img width="868" height="498" alt="image" src="https://github.com/user-attachments/assets/9612b945-3729-4a78-a0ab-9d5db48274e5" />
+-- 
+Write a SQL query to delete a doctor from Doctors table whos specialization is 'Cardiology'
+
+Sample table: Doctors
+    
+    attributes : doctor_id, first_name, last_name, specialization
 
 
 ```sql
-INSERT INTO Customers (ID, NAME, AGE, ADDRESS, SALARY) VALUES
-(1, 'Ramesh', 32, 'Ahmedabad', 2000),
-(2, 'Khilan', 25, 'Delhi', 1500),
-(3, 'Kaushik',23, 'Kota', 2000);
+-- 
+DELETE FROM doctors
+WHERE specialization = 'Cardiology';
 ```
 
 **Output:**
 
-<img width="1758" height="419" alt="image" src="https://github.com/user-attachments/assets/98862823-75f6-4779-96f8-78af6be976f0" />
-
+![image](https://github.com/user-attachments/assets/208b8ce5-4566-4332-9a3b-875569885795)
 
 
 **Question 9**
 ---
-<img width="1597" height="315" alt="image" src="https://github.com/user-attachments/assets/87731bc1-d025-4e35-9ce4-4e780607bf93" />
+-- 
+Write a SQL query to Delete customers from 'customer' table where 'GRADE' is less than 2.
 
+ 
+    Sample table: Customer
+    
+    +-----------+-------------+-------------+--------------+--------------+-------+-------------+-------------+-------------+---------------+--------------+------------+  
+    |CUST_CODE  | CUST_NAME   | CUST_CITY   | WORKING_AREA | CUST_COUNTRY | GRADE | OPENING_AMT | RECEIVE_AMT | PAYMENT_AMT |OUTSTANDING_AMT| PHONE_NO     | AGENT_CODE |
+    +-----------+-------------+-------------+--------------+--------------+-------+-------------+-------------+-------------+---------------+--------------+------------+
+    | C00013    | Holmes      | London      | London       | UK           |     2 |     6000.00 |     5000.00 |     7000.00 |       4000.00 | BBBBBBB      | A003       |
+    | C00001    | Micheal     | New York    | New York     | USA          |     2 |     3000.00 |     5000.00 |     2000.00 |       6000.00 | CCCCCCC      | A008       |
+    | C00020    | Albert      | New York    | New York     | USA          |     3 |     5000.00 |     7000.00 |     6000.00 |       6000.00 | BBBBSBB      | A008       |
 
 ```sql
-ALTER TABLE Student_details
-ADD COLUMN email TEXT NOT NULL DEFAULT 'Invalid';
-
+-- 
+DELETE FROM customer
+WHERE grade < 2;
 ```
 
 **Output:**
 
-<img width="1704" height="318" alt="image" src="https://github.com/user-attachments/assets/ce4698b0-e52c-49f8-8519-d51595d1ab56" />
+![image](https://github.com/user-attachments/assets/2928fbd8-e7db-4951-b285-2e78c70f2781)
 
 
 **Question 10**
 ---
-<img width="1648" height="397" alt="image" src="https://github.com/user-attachments/assets/447413c7-52c8-45ec-9d19-81f1517a8e12" />
+-- 
+Write a SQL query to locate the details of customers with grade values above 100. Return customer_id, cust_name, city, grade, and salesman_id.
 
+Sample table: customer
+
+     customer_id |   cust_name    |    city    | grade | salesman_id
+    
+    -------------+----------------+------------+-------+-------------
+    
+            3002 | Nick Rimando   | New York   |   100 |        5001
+    
+            3007 | Brad Davis     | New York   |   200 |        5001
+    
+            3005 | Graham Zusi    | California |   200 |        5002
 
 ```sql
-CREATE TABLE ProjectAssignments (
-    AssignmentID INTEGER PRIMARY KEY,
-    EmployeeID INTEGER,
-    ProjectID INTEGER,
-    AssignmentDate DATE NOT NULL,
-    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID),
-    FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID)
-);
-    
+-- 
+SELECT customer_id, cust_name, city, grade, salesman_id
+FROM customer
+WHERE grade > 100;
 ```
 
 **Output:**
 
-<img width="1767" height="284" alt="image" src="https://github.com/user-attachments/assets/3ad8c535-6e8b-4d16-aef4-76c636b7659a" />
-
-
+![image](https://github.com/user-attachments/assets/aee807ac-1c83-4c78-9adb-b38d51189bd0)
 
 
 ## RESULT
-Thus, the SQL queries to implement different types of constraints and DDL commands have been executed successfully.
+Thus, the SQL queries to implement DML commands have been executed successfully.
