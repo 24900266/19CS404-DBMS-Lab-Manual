@@ -104,79 +104,127 @@ CREATE TABLE Table_Name (
 ```
 
 **Question 1**
-Create a new table named item with the following specifications and constraints:
-item_id as TEXT and as primary key.
-item_desc as TEXT.
-rate as INTEGER.
-icom_id as TEXT with a length of 4.
-icom_id is a foreign key referencing com_id in the company table.
-The foreign key should cascade updates and deletes.
-item_desc and rate should not accept NULL.
+Create a table named Customers with the following columns:
+
+CustomerID as INTEGER
+Name as TEXT
+Email as TEXT
+JoinDate as DATETIME
 ```sql
-create table item(
-item_id TEXT primary key,
-item_desc TEXT not null,
-rate INTEGER not null,
-icom_id TEXT check (Length(icom_id)=4),
-Foreign Key (icom_id) References company(com_id)
-on update cascade
-on delete cascade
+create table Customers(
+CustomerID INTEGER,
+Name TEXT,
+Email TEXT,
+JoinDate DATETIME
 );
 ```
 
 **Output:**
-<img width="1239" height="397" alt="Screenshot 2025-09-29 132609" src="https://github.com/user-attachments/assets/1ec3639f-6c3d-4435-bebe-86dd3c82e87f" />
+
+<img width="1368" height="523" alt="Screenshot 2025-10-18 135035" src="https://github.com/user-attachments/assets/e33388b1-606c-4780-827c-921f6b346416" />
 
 
 **Question 2**
 ---
--Insert all products from Discontinued_products into Products.
-
-Table attributes are ProductID, ProductName, Price, Stock
+Create a table named Bonuses with the following constraints:
+BonusID as INTEGER should be the primary key.
+EmployeeID as INTEGER should be a foreign key referencing Employees(EmployeeID).
+BonusAmount as REAL should be greater than 0.
+BonusDate as DATE.
+Reason as TEXT should not be NULL.
 ```sql
-insert into Products ('ProductId','ProductName','Price','Stock')
-select ProductId,ProductName,Price,Stock from Discontinued_products
+create table Bonuses(
+BonusID INTEGER  primary key,
+EmployeeID INTEGER,
+BonusAmount REAL check(BonusAmount>0),
+BonusDate DATE,
+Reason TEXT NOT NULL,
+foreign key (EmployeeID) references Employees(EmployeeID)
+);
 ```
-
 **Output:**
 
-<img width="1229" height="332" alt="Screenshot 2025-09-29 133024" src="https://github.com/user-attachments/assets/d599df93-c966-49f0-a9cb-5a602b8ccdde" />
+
+<img width="1367" height="389" alt="Screenshot 2025-10-18 135059" src="https://github.com/user-attachments/assets/2efd3abd-58e1-4293-9745-edacde751ce0" />
 
 
 **Question 3**
 ---
-Create a table named Products with the following constraints:
-ProductID as INTEGER should be the primary key.
-ProductName as TEXT should be unique and not NULL.
-Price as REAL should be greater than 0.
-StockQuantity as INTEGER should be non-negative.
+Write a SQL query to add birth_date attribute as timestamp (datatype) in the table customer 
 
+Sample table: customer
+
+ customer_id |   cust_name    |    city    | grade | salesman_id 
+-------------+----------------+------------+-------+-------------
+        3002 | Nick Rimando   | New York   |   100 |        5001
+        3007 | Brad Davis     | New York   |   200 |        5001
+        3005 | Graham Zusi    | California |   200 |        5002
 ```sql
-create table Products(
-ProductID integer primary key,
-ProductName Text unique not null,
-Price Real check(Price>0),
-StockQuantity integer check(StockQuantity >=0) );
+alter table customer
+add birth_date timestamp
 ```
-
 **Output:**
 
-<img width="1231" height="325" alt="Screenshot 2025-09-29 133035" src="https://github.com/user-attachments/assets/a1212aae-7bf2-45f8-84e0-faec2c529b94" />
+
+<img width="1358" height="476" alt="Screenshot 2025-10-18 135122" src="https://github.com/user-attachments/assets/9c57b2c1-c106-4ab3-a79a-d059d7ce05b6" />
+
 
 **Question 4**
 ---
-Write an SQL command can to add a column named email of type TEXT to the customers table
-
+Write a SQL query to add a column named Date_of_birth as Date in the Student_details table.
 ```sql
-alter table customers
-add column email TEXT;
+alter table Student_details
+add column Date_of_birth Date
 ```
 
 **Output:**
 
-<img width="1234" height="329" alt="Screenshot 2025-09-29 133047" src="https://github.com/user-attachments/assets/748b30d5-36ff-4c82-ab22-d831e4b34104" />
+<img width="1345" height="474" alt="Screenshot 2025-10-18 135142" src="https://github.com/user-attachments/assets/5a843009-d912-4565-9551-8603ee22ff9a" />
 
 **Question 5**
+---
+Insert the below data into the Books table, allowing the Publisher and Year columns to take their default values.
+
+ISBN             Title                 Author
+---------------  --------------------  ---------------
+978-6655443321   Big Data Analytics    Karen Adams
+
+Note: The Publisher and Year columns will use their default values.
+ 
+ 
+```sql
+insert into Books(ISBN,Title,Author) values('978-6655443321','Big Data Analytics','Karen Adams');
+```
+
+**Output:**
+
+
+<img width="1351" height="440" alt="Screenshot 2025-10-18 135158" src="https://github.com/user-attachments/assets/2bcb2e4e-bee5-42fb-80a6-5e584a69178e" />
+
+
+**Question 6**
+---
+Create a table named Attendance with the following constraints:
+AttendanceID as INTEGER should be the primary key.
+EmployeeID as INTEGER should be a foreign key referencing Employees(EmployeeID).
+AttendanceDate as DATE.
+Status as TEXT should be one of 'Present', 'Absent', 'Leave'.
+```sql
+create table Attendance(
+AttendanceID INTEGER primary key,
+EmployeeID INTEGER,
+AttendanceDate  DATE,
+Status TEXT check(status IN('Present','Absent','Leave')),
+foreign key (EmployeeID) references Employees(EmployeeID));
+```
+
+**Output:**
+
+
+<img width="1227" height="345" alt="image" src="https://github.com/user-attachments/assets/3f737859-e778-41de-a3e7-cd61e439cf5e" />
+
+
+**Question 7**
 ---
 Create a table named Employees with the following constraints:
 
@@ -188,9 +236,9 @@ DepartmentID should be a foreign key referencing the Departments table.
 ```sql
 create table Employees(
 EmployeeID integer primary key,
-FirstName varchar(50) not null,
-LastName varchar (50) not null,
-Email Tect unique,
+FirstName varchar(50) NOT NULL,
+LastName varchar(50) NOT NULL,
+Email text unique,
 Salary check (Salary>0),
 DepartmentID integer,
 foreign key (DepartmentID) references Departments(DepartmentID)
@@ -199,97 +247,68 @@ foreign key (DepartmentID) references Departments(DepartmentID)
 
 **Output:**
 
-<img width="1234" height="475" alt="Screenshot 2025-09-29 133055" src="https://github.com/user-attachments/assets/8389963e-6f2e-4db4-89fd-da1dca3517f8" />
+<img width="1196" height="412" alt="image" src="https://github.com/user-attachments/assets/e0df255b-75c1-48c6-b438-42c94bc4505d" />
 
 
-**Question 6**
+**Question 8**
 ---
-Write an SQL query to add a new column salary of type INTEGER to the Employees table, with a CHECK constraint that ensures the value in this column is greater than 0.
+Insert all employees from Former_employees into Employee
 
+Table attributes are EmployeeID, Name, Department, Salary
+ 
 ```sql
-alter table Employees
-add column salary INTEGER check (salary>0);
+insert into Employee(EmployeeID,Name,Department,Salary)
+select EmployeeID,Name,Department,Salary from Former_employees;
 ```
 
 **Output:**
 
-<img width="1236" height="337" alt="Screenshot 2025-09-29 133103" src="https://github.com/user-attachments/assets/5f7d492e-58c8-4c87-a33b-c4284f157e09" />
+
+<img width="1227" height="382" alt="image" src="https://github.com/user-attachments/assets/4d676538-cd61-4893-942a-113d66c8c53c" />
 
 
-
-**Question 7**
+**Question 9**
 ---
-Create a table named Members with the following columns:
-
-MemberID as INTEGER
-MemberName as TEXT
-JoinDate as DATE
-
+Create a table named Shipments with the following constraints:
+ShipmentID as INTEGER should be the primary key.
+ShipmentDate as DATE.
+SupplierID as INTEGER should be a foreign key referencing Suppliers(SupplierID).
+OrderID as INTEGER should be a foreign key referencing Orders(OrderID).
 ```sql
-create table Members (
-MemberID INTEGER ,
-MemberName TEXT,
-JoinDate DATE
+create table Shipments(
+ShipmentID INTEGER PRIMARY KEY,
+ShipmentDate DATE,
+SupplierID INTEGER,
+OrderID INTEGER,
+foreign key (SupplierID) References Suppliers(SupplierID)
+foreign key (OrderID) References Orders(OrderID)
 );
 ```
 
 **Output:**
 
-<img width="1233" height="419" alt="Screenshot 2025-09-29 133111" src="https://github.com/user-attachments/assets/ca3abbba-e7c4-4a78-99f5-bbb315e56818" />
 
-**Question 8**
----
-Write a SQL Query for inserting the below values in the table Customers
-
-ID               NAME             AGE  ADDRESS     SALARY      
----------------  ---------------  ---  ----------  ----------  
-1                Ramesh           32   Ahmedabad   2000
-2                Khilan           25   Delhi       1500
-3                Kaushik          23   Kota        2000
- 
-```sql
-Insert into Customers (ID, NAME, AGE, ADDRESS, SALARY)
-Values (1,'Ramesh', 32, 'Ahmedabad', 2000),
-(2,'Khilan', 25, 'Delhi', 1500),
-(3,'Kaushik', 23, 'Kota', 2000);
-```
-
-**Output:**
-
-<img width="1232" height="329" alt="Screenshot 2025-09-29 133118" src="https://github.com/user-attachments/assets/64fc794c-6476-4381-976a-177e00d10959" />
-
-
-**Question 9**
----
-Create a table named Invoices with the following constraints:
-
-InvoiceID as INTEGER should be the primary key.
-InvoiceDate as DATE.
-DueDate as DATE should be greater than the InvoiceDate.
-Amount as REAL should be greater than 0.
-```sql
-create table Invoices(
-InvoiceID INTEGER primary key,
-InvoiceDate DATE,
-DueDate DATE check( DueDate > InvoiceDate),
-Amount REAL check (Amount>0));
-```
-
-**Output:**
-
-<img width="1231" height="327" alt="Screenshot 2025-09-29 133128" src="https://github.com/user-attachments/assets/bd8d150d-1c23-4a75-ab18-5bfc8921e763" />
+<img width="1361" height="360" alt="Screenshot 2025-10-18 135441" src="https://github.com/user-attachments/assets/9b923933-5344-47ab-adf0-7166a1b4ae71" />
 
 **Question 10**
 ---
-Insert a new product with ProductID 101, Name Laptop, Category Electronics, Price 1500, and Stock 50 into the Products table.
+Insert the following students into the Student_details table:
+RollNo      Name        Gender      Subject     MARKS
+----------  ----------  ----------  ----------  ----------
+202            Ella King         F           Chemistry   87
+203            James Bond   M          Literature    78
+
+
+ 
 ```sql
-insert into Products ('ProductID', 'Name', 'Category', 'Price', 'Stock') values (101, 'Laptop', 'Electronics', 1500, 50);
+insert into Student_details(RollNo,Name,Gender,Subject,MARKS) values ('202','Ella King','F','Chemistry','87'), ('203','James Bond','M','Literature','78');
+
 ```
 
 **Output:**
 
-<img width="1252" height="282" alt="Screenshot 2025-09-29 133141" src="https://github.com/user-attachments/assets/64d0d463-cf06-4b27-881c-fb2f102bf8e6" />
 
+<img width="1354" height="380" alt="Screenshot 2025-10-18 135456" src="https://github.com/user-attachments/assets/3697bc4a-7a8a-432a-9e99-529487789320" />
 
 
 ## RESULT
